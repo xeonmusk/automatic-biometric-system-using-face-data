@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Success</title>
+    <style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)),
+                        url('https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #e6edf3;
+            min-height: 100vh;
+        }
+
+        header {
+            background: rgba(13, 17, 23, 0.8);
+            padding: 1.5rem;
+            box-shadow: 0 2px 20px rgba(0, 123, 255, 0.2);
+            backdrop-filter: blur(8px);
+        }
+
+        header h1 {
+            margin: 0;
+            text-align: center;
+            color: #4a90e2;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(74, 144, 226, 0.5);
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: rgba(13, 17, 23, 0.8);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(74, 144, 226, 0.2);
+            transition: all 0.4s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(74, 144, 226, 0.2);
+            border-color: rgba(74, 144, 226, 0.4);
+        }
+
+        .card h2 {
+            color: #4a90e2;
+            margin-bottom: 1rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            text-shadow: 0 0 8px rgba(74, 144, 226, 0.3);
+        }
+
+        .card p {
+            color: #b8c4e6;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .card a {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(74, 144, 226, 0.2);
+        }
+
+        .card a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 144, 226, 0.3);
+            background: linear-gradient(135deg, #357abd 0%, #2868a8 100%);
+        }
+
+        footer {
+            background: rgba(13, 17, 23, 0.8);
+            padding: 1rem;
+            text-align: center;
+            margin-top: auto;
+            backdrop-filter: blur(8px);
+            border-top: 1px solid rgba(74, 144, 226, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        footer p {
+            color: #b8c4e6;
+            margin: 0;
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .card h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+        .space-objects {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 150px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .planet {
+            position: absolute;
+            border-radius: 50%;
+            animation: float 15s infinite ease-in-out;
+            transform-style: preserve-3d;
+        }
+
+        .planet-1 {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(45deg, #ff6b6b, #ff8787);
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.4);
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .planet-2 {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #4a90e2, #357abd);
+            box-shadow: 0 0 25px rgba(74, 144, 226, 0.4);
+            left: 40%;
+            animation-delay: -5s;
+        }
+
+        .planet-3 {
+            width: 25px;
+            height: 25px;
+            background: linear-gradient(45deg, #ffd43b, #fab005);
+            box-shadow: 0 0 20px rgba(255, 212, 59, 0.4);
+            left: 70%;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-50px) rotate(180deg);
+            }
+        }
+
+        .space-footer {
+            position: relative;
+            overflow: hidden;
+            height: 200px;
+            margin-top: 30px;
+            perspective: 1000px;
+        }
+
+        .rocket-robot {
+            position: absolute;
+            width: 60px;
+            height: 120px;
+            animation: fly 20s infinite linear;
+            transform-origin: center center;
+        }
+
+        .starship {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+        }
+
+        .body {
+            position: absolute;
+            width: 40px;
+            height: 120px;
+            background: linear-gradient(
+                90deg,
+                #1a1a1a 0%,
+                #303030 20%,
+                #404040 50%,
+                #303030 80%,
+                #1a1a1a 100%
+            );
+            border-radius: 20px 20px 10px 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            overflow: hidden;
+        }
+
+        .body::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                45deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.1) 45%,
+                rgba(255, 255, 255, 0.2) 50%,
+                rgba(255, 255, 255, 0.1) 55%,
+                transparent 100%
+            );
+            background-size: 200% 100%;
+            animation: metallic-shine 3s infinite linear;
+        }
+
+        .nose {
+            position: absolute;
+            width: 30px;
+            height: 40px;
+            background: linear-gradient(
+                90deg,
+                #1a1a1a 0%,
+                #303030 20%,
+                #404040 50%,
+                #303030 80%,
+                #1a1a1a 100%
+            );
+            border-radius: 20px 20px 0 0;
+            left: 50%;
+            transform: translateX(-50%);
+            top: -20px;
+            overflow: hidden;
+        }
+
+        .fins {
+            position: absolute;
+            bottom: 0;
+            width: 80px;
+            height: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .fin {
+            position: absolute;
+            width: 25px;
+            height: 35px;
+            background: linear-gradient(
+                45deg,
+                #1a1a1a 0%,
+                #303030 50%,
+                #1a1a1a 100%
+            );
+        }
+
+        .fin-left {
+            left: 0;
+            transform: skew(-30deg);
+            border-radius: 5px 0 0 5px;
+        }
+
+        .fin-right {
+            right: 0;
+            transform: skew(30deg);
+            border-radius: 0 5px 5px 0;
+        }
+
+        .flames {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 40px;
+            animation: burn 0.1s infinite alternate;
+        }
+
+        .flame {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                transparent 0%,
+                #ff4d4d 20%,
+                #ff9068 40%,
+                #ffeb3b 60%,
+                transparent 100%
+            );
+            filter: blur(2px);
+            border-radius: 0 0 20px 20px;
+            opacity: 0.8;
+        }
+
+        @keyframes metallic-shine {
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        @keyframes burn {
+            0% {
+                height: 40px;
+                opacity: 1;
+            }
+            100% {
+                height: 35px;
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes fly {
+            0% {
+                left: 20%;
+                transform: translateY(-50%) rotate(0deg);
+            }
+            45% {
+                left: 80%;
+                transform: translateY(-50%) rotate(0deg);
+            }
+            50% {
+                left: 80%;
+                transform: translateY(-50%) rotate(-180deg);
+            }
+            95% {
+                left: 20%;
+                transform: translateY(-50%) rotate(-180deg);
+            }
+            100% {
+                left: 20%;
+                transform: translateY(-50%) rotate(-360deg);
+            }
+        }
+
+        .earth {
+            width: 60px;
+            height: 60px;
+            left: 20%;
+            top: 50%;
+            background: linear-gradient(to bottom right,
+                #4B79A1, /* Deep ocean blue */
+                #283E51, /* Darker ocean */
+                #78ffd6, /* Shallow waters */
+                #2C5364, /* Deep waters */
+                #007991  /* Coastline blue */
+            );
+            box-shadow: 
+                inset -4px -4px 8px rgba(0,0,0,0.5),
+                0 0 20px rgba(120, 255, 214, 0.4);
+            transform: translateY(-50%);
+            animation: rotateEarth 20s linear infinite;
+        }
+
+        .earth::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><path d="M30,50 Q50,30 70,50 T90,50" fill="none" stroke="rgba(120,255,214,0.3)" stroke-width="2"/></svg>') repeat;
+            animation: cloudMove 10s linear infinite;
+        }
+
+        .mars {
+            width: 45px;
+            height: 45px;
+            right: 20%;
+            top: 50%;
+            background: linear-gradient(to bottom right,
+                #ff4b1f, /* Mars red */
+                #ff9068, /* Mars orange */
+                #8B0000, /* Dark red */
+                #ff6b6b, /* Light red */
+                #8B0000  /* Dark red */
+            );
+            box-shadow: 
+                inset -3px -3px 6px rgba(0,0,0,0.5),
+                0 0 25px rgba(255, 75, 31, 0.4);
+            transform: translateY(-50%);
+            animation: rotateMars 25s linear infinite;
+        }
+
+        .mars::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%,
+                rgba(255,255,255,0.1) 0%,
+                rgba(255,255,255,0) 60%
+            );
+        }
+
+        @keyframes rotateEarth {
+            from {
+                transform: translateY(-50%) rotate(0deg);
+            }
+            to {
+                transform: translateY(-50%) rotate(360deg);
+            }
+        }
+
+        @keyframes rotateMars {
+            from {
+                transform: translateY(-50%) rotate(0deg);
+            }
+            to {
+                transform: translateY(-50%) rotate(360deg);
+            }
+        }
+
+        @keyframes cloudMove {
+            from {
+                background-position: 0 0;
+            }
+            to {
+                background-position: 100% 0;
+            }
+        }
+
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 50px 160px, #ddd, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 130px 80px, #fff, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            animation: twinkle 4s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 0.4; }
+        }
+    </style>
+</head>
+<body>
+    <div class="success-message">
+        <h1>Success!</h1>
+        <p>Folder uploaded successfully.</p>
+    </div>
+</body>
+</html>

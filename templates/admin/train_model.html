@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Train Model</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1a1f25 0%, #0d1117 100%);
+            color: #e6edf3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #21262d;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
+        .title {
+            color: #58a6ff;
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
+        }
+        button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 1rem;
+            background-color: #238636;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        button:disabled {
+            background-color: #6a737d;
+            cursor: not-allowed;
+        }
+        button:hover:not(:disabled) {
+            background-color: #2ea043;
+            transform: translateY(-2px);
+        }
+        .loading-spinner {
+            display: none;
+            margin-left: 10px;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-top: 3px solid #ffffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        button.loading .loading-spinner {
+            display: inline-block;
+        }
+        #status {
+            margin-top: 1rem;
+            color: #8b949e;
+            min-height: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Train Model</h1>
+        <button onclick="startTraining()" id="trainButton">
+            <span id="buttonText">Start Training</span>
+            <div class="loading-spinner" id="spinner"></div>
+        </button>
+        <div id="status"></div>
+    </div>
+    <script>
+        function startTraining() {
+            const button = document.getElementById('trainButton');
+            const buttonText = document.getElementById('buttonText');
+            const spinner = document.getElementById('spinner');
+            const status = document.getElementById('status');
+
+            // Update UI to show loading state
+            button.classList.add('loading');
+            buttonText.textContent = "Training...";
+            spinner.style.display = 'inline-block';
+            button.disabled = true;
+            status.textContent = 'Training in progress...';
+
+            // Send POST request to Flask backend
+            fetch('/trainModel', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        status.textContent = data.message;
+                        status.style.color = '#238636'; // Success color
+                    } else {
+                        status.textContent = 'Error: ' + data.error;
+                        status.style.color = '#f85149'; // Error color
+                    }
+                })
+                .catch(error => {
+                    status.textContent = 'Error: ' + error.message;
+                    status.style.color = '#f85149'; // Error color
+                })
+                .finally(() => {
+                    // Reset UI after response
+                    button.classList.remove('loading');
+                    buttonText.textContent = "Start Training";
+                    spinner.style.display = 'none';
+                    button.disabled = false;
+                });
+        }
+    </script>
+</body>
+</html>

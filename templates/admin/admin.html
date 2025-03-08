@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Futuristic Admin Panel</title>
+    <style>
+        /* Base Styles */
+        body {
+            margin: 0;
+            font-family: 'Space Grotesk', sans-serif;
+            background: radial-gradient(circle, #0f0f0f, #1a1a1a);
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 90vw;
+            margin: 0 auto;
+            padding: 2vw;
+            flex: 1;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 2vw;
+            font-size: clamp(16px, 2vw, 24px);
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 10px rgba(0, 255, 255, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        .header h1 {
+            margin: 0;
+            color: #4a90e2;
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px rgba(74, 144, 226, 0.5);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: clamp(150px, 15vw, 200px);
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 2vw;
+            box-shadow: 4px 0 10px rgba(0, 255, 255, 0.2);
+            transition: width 0.3s;
+            z-index: 2;
+        }
+
+        .sidebar:hover {
+            width: clamp(200px, 20vw, 250px);
+        }
+
+        /* Button Styling */
+        .button-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(clamp(120px, 15vw, 150px), 1fr));
+            gap: clamp(10px, 2vw, 20px);
+            padding: clamp(20px, 3vw, 30px);
+            justify-content: center;
+        }
+
+        .admin-section {
+            padding: 2vw;
+        }
+
+        .admin-section h2 {
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            margin-bottom: 1vw;
+        }
+
+        .admin-section button {
+            padding: clamp(10px, 2vw, 20px);
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: clamp(14px, 1.5vw, 18px);
+            transition: all 0.3s;
+            color: white;
+            font-family: 'Space Grotesk', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .admin-section button:hover {
+            background: rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
+            transform: scale(1.1);
+        }
+
+        /* Form Adjustments */
+        .form-group label {
+            font-size: clamp(14px, 1.5vw, 16px);
+        }
+
+        .form-group input {
+            font-size: clamp(12px, 1.2vw, 14px);
+            padding: clamp(8px, 1vw, 12px);
+        }
+
+        .form-group button {
+            font-size: clamp(14px, 1.5vw, 16px);
+            padding: clamp(10px, 1.5vw, 15px);
+        }
+
+        /* Dark Mode */
+        .dark-mode {
+            background: radial-gradient(circle, #1a1a1a, #0f0f0f);
+            color: #ddd;
+        }
+
+        .toggle-dark {
+            position: absolute;
+            top: 1vw;
+            right: 1vw;
+            background: rgba(0, 255, 255, 0.3);
+            border: none;
+            padding: clamp(8px, 1vw, 10px);
+            cursor: pointer;
+            border-radius: 10px;
+            color: white;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(12px, 1.2vw, 14px);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 1vw;
+            position: sticky;
+            bottom: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            box-shadow: 0 -4px 10px rgba(0, 255, 255, 0.2);
+            z-index: 1;
+        }
+
+        .footer p {
+            margin: 0;
+            color: #8b949e;
+            font-size: clamp(0.7rem, 1vw, 0.9rem);
+        }
+
+        /* Classroom Simulation Container */
+        .canvas-container {
+            position: relative;
+            width: clamp(300px, 80vw, 1000px);
+            height: clamp(200px, 60vh, 600px);
+            margin: 2vw auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+            overflow: hidden;
+        }
+
+        #info-panel {
+            position: absolute;
+            top: 1vw;
+            left: 1vw;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: clamp(8px, 1vw, 10px);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+            z-index: 100;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(12px, 1.2vw, 16px);
+        }
+
+        #controls {
+            position: absolute;
+            bottom: 2vw;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: clamp(5px, 1vw, 10px);
+            z-index: 100;
+        }
+
+        #controls button {
+            padding: clamp(8px, 1.5vw, 10px) clamp(15px, 2vw, 20px);
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: clamp(12px, 1.2vw, 14px);
+            color: white;
+            font-family: 'Space Grotesk', sans-serif;
+            transition: all 0.3s;
+        }
+
+        #controls button:hover {
+            background: rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
+        }
+
+        .capture-flash {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0);
+            pointer-events: none;
+            z-index: 50;
+            transition: background-color 0.1s ease;
+        }
+
+        .flash-active {
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Animated Background */
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(
+                45deg,
+                #0f2027 0%,
+                #203a43 50%,
+                #2c5364 100%
+            );
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .space-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 50px 160px, #ddd, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 130px 80px, #fff, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            animation: twinkle 4s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 0.4; }
+        }
+
+        .galaxy-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center,
+                #1a1a2e 0%,
+                #16213e 50%,
+                #0f172a 100%);
+            z-index: -2;
+        }
+
+        .nebula {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(88, 103, 221, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(255, 107, 129, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(98, 0, 234, 0.2) 0%, transparent 50%);
+            filter: blur(30px);
+            z-index: -1;
+        }
+
+        /* Media Queries */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100px;
+            }
+            .sidebar:hover {
+                width: 150px;
+            }
+            .canvas-container {
+                width: 90vw;
+                height: 50vh;
+            }
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            .toggle-dark {
+                padding: 5px;
+                font-size: 10px;
+            }
+            .admin-section button {
+                font-size: 12px;
+            }
+            #info-panel, #controls button {
+                font-size: 10px;
+                padding: 5px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Elements -->
+    <div class="background-animation"></div>
+    <div class="space-background">
+        <div class="stars"></div>
+    </div>
+    <div class="galaxy-background"></div>
+    <div class="nebula"></div>
+
+    <!-- Header -->
+    <div class="header">
+        <h1>Admin Dashboard</h1>
+        <button class="toggle-dark" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container">
+        <section class="admin-section">
+            <h2>Model Management</h2>
+            <div class="button-group">
+                <button onclick="location.href='/uploadDataset'">Load Dataset</button>
+                <button onclick="location.href='/preprocessDataset'">Preprocess Dataset</button>
+                <form action="{{ url_for('train_model') }}" method="post" style="width:100%; margin-bottom:20px;">
+                    <div class="form-group">
+                        <label for="model_name">Model Name:</label>
+                        <input type="text" 
+                               class="form-control" 
+                               id="model_name" 
+                               name="model_name" 
+                               placeholder="Enter model name (e.g. csm)" 
+                               required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Train Model</button>
+                </form>
+                <button onclick="document.getElementById('singleImageInput').click()">Upload Single Image</button>
+                <button onclick="document.getElementById('multipleImagesInput').click()">Upload Multiple Images</button>
+                <button onclick="location.href='/testSingleImage'">Test Single Image</button>
+                <button onclick="location.href='/testMultipleImages'">Test Multiple Images</button>
+            </div>
+
+            <!-- Hidden File Inputs -->
+            <form id="singleImageForm" action="/predictSingleImage" method="post" enctype="multipart/form-data">
+                <input type="file" id="singleImageInput" name="image_file" accept="image/*" onchange="document.getElementById('singleImageForm').submit()">
+            </form>
+
+            <form id="multipleImagesForm" action="/predictMultipleImages" method="post" enctype="multipart/form-data">
+                <input type="file" id="multipleImagesInput" name="images_folder" webkitdirectory directory onchange="document.getElementById('multipleImagesForm').submit()">
+            </form>
+        </section>
+
+        <!-- Classroom Camera Simulation -->
+        <div class="canvas-container" id="canvas-container">
+            <div id="info-panel">
+                <h3>Classroom Camera Simulation</h3>
+                <p>Camera Mode: <span id="camera-mode">Manual</span></p>
+                <p>Images Captured: <span id="capture-count">0</span></p>
+            </div>
+            <div class="capture-flash" id="flash"></div>
+            <div id="controls">
+                <button id="auto-btn">Auto Capture</button>
+                <button id="capture-btn">Capture Image</button>
+                <button id="reset-btn">Reset Counter</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>© 2024 Attendance System. All rights reserved.</p>
+    </div>
+
+    <!-- JavaScript for Dark Mode and Classroom Simulation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        // Scene setup
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x6EC5B8); // White background
+
+        // Main Camera setup
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(8, 7, 8);
+        camera.lookAt(0, 0, 0);
+
+        // Renderer setup
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        const canvasContainer = document.getElementById('canvas-container');
+        renderer.setSize(canvasContainer.clientWidth, canvasContainer.clientHeight);
+        renderer.shadowMap.enabled = true;
+        canvasContainer.appendChild(renderer.domElement);
+
+        // Texture and Font Loaders
+        const textureLoader = new THREE.TextureLoader();
+        const fontLoader = new THREE.FontLoader();
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+        scene.add(ambientLight);
+
+        const ceilingLight = new THREE.PointLight(0xfff8e1, 1.2, 20);
+        ceilingLight.position.set(0, 3.8, 0);
+        ceilingLight.castShadow = true;
+        scene.add(ceilingLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(5, 10, 7);
+        directionalLight.castShadow = true;
+        directionalLight.shadow.mapSize.width = 2048;
+        directionalLight.shadow.mapSize.height = 2048;
+        directionalLight.shadow.bias = -0.0001;
+        scene.add(directionalLight);
+
+        // Classroom setup
+        function createClassroom() {
+            const classroom = new THREE.Group();
+
+            const floorTexture = textureLoader.load('./textures/periodic-table.jpg');
+            floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
+            floorTexture.repeat.set(4, 4);
+            const floorGeometry = new THREE.PlaneGeometry(15, 10);
+            const floorMaterial = new THREE.MeshStandardMaterial({ 
+                map: floorTexture,
+                roughness: 0.8,
+                metalness: 0.2
+            });
+            const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+            floor.rotation.x = -Math.PI / 2;
+            floor.receiveShadow = true;
+            classroom.add(floor);
+
+            const wallTexture = textureLoader.load('./textures/periodic-table.jpg');
+            wallTexture.wrapS = wallTexture.wrapT = THREE.RepeatWrapping;
+            wallTexture.repeat.set(3, 1);
+            const wallMaterial = new THREE.MeshStandardMaterial({
+                map: wallTexture,
+                roughness: 0.9,
+                metalness: 0.1
+            });
+
+            const backWallGeometry = new THREE.PlaneGeometry(15, 4);
+            const backWall = new THREE.Mesh(backWallGeometry, wallMaterial);
+            backWall.position.set(0, 2, -5);
+            backWall.receiveShadow = true;
+            classroom.add(backWall);
+
+            const leftWallGeometry = new THREE.PlaneGeometry(10, 4);
+            const leftWall = new THREE.Mesh(leftWallGeometry, wallMaterial);
+            leftWall.position.set(-7.5, 2, 0);
+            leftWall.rotation.y = Math.PI / 2;
+            leftWall.receiveShadow = true;
+            classroom.add(leftWall);
+
+            const rightWallGeometry = new THREE.PlaneGeometry(10, 4);
+            const rightWall = new THREE.Mesh(rightWallGeometry, wallMaterial);
+            rightWall.position.set(7.5, 2, 0);
+            rightWall.rotation.y = -Math.PI / 2;
+            rightWall.receiveShadow = true;
+            classroom.add(rightWall);
+
+            const frontWallLeftGeometry = new THREE.PlaneGeometry(10, 4);
+            const frontWallLeft = new THREE.Mesh(frontWallLeftGeometry, wallMaterial);
+            frontWallLeft.position.set(-2.5, 2, 5);
+            frontWallLeft.rotation.y = Math.PI;
+            frontWallLeft.receiveShadow = true;
+            classroom.add(frontWallLeft);
+
+            const frontWallRightGeometry = new THREE.PlaneGeometry(3, 4);
+            const frontWallRight = new THREE.Mesh(frontWallRightGeometry, wallMaterial);
+            frontWallRight.position.set(6, 2, 5);
+            frontWallRight.rotation.y = Math.PI;
+            frontWallRight.receiveShadow = true;
+            classroom.add(frontWallRight);
+
+            const periodicTableTexture = textureLoader.load('./textures/periodic-table.jpg');
+            const periodicTableGeometry = new THREE.PlaneGeometry(2, 1.5);
+            const periodicTable = new THREE.Mesh(periodicTableGeometry, new THREE.MeshStandardMaterial({ map: periodicTableTexture }));
+            periodicTable.position.set(-5, 2.5, -4.95);
+            periodicTable.rotation.y = -Math.PI / 2;
+            classroom.add(periodicTable);
+
+            const solarSystemTexture = textureLoader.load('./textures/solar-system.jpg');
+            const solarSystemGeometry = new THREE.PlaneGeometry(2, 1);
+            const solarSystem = new THREE.Mesh(solarSystemGeometry, new THREE.MeshStandardMaterial({ map: solarSystemTexture }));
+            solarSystem.position.set(3, 2.5, -4.95);
+            classroom.add(solarSystem);
+
+            const physicsTexture = textureLoader.load('./textures/physics-diagram.jpg');
+            const physicsGeometry = new THREE.PlaneGeometry(1.5, 1);
+            const physicsPoster = new THREE.Mesh(physicsGeometry, new THREE.MeshStandardMaterial({ map: physicsTexture }));
+            physicsPoster.position.set(-2, 2.5, -4.95);
+            classroom.add(physicsPoster);
+
+            const bulletinTexture = textureLoader.load('./textures/corkboard.jpg');
+            const bulletinGeometry = new THREE.PlaneGeometry(3, 1.5);
+            const bulletin = new THREE.Mesh(bulletinGeometry, new THREE.MeshStandardMaterial({ map: bulletinTexture }));
+            bulletin.position.set(5, 2.5, -4.95);
+            classroom.add(bulletin);
+
+            const noteTexture = textureLoader.load('./textures/note-paper.jpg');
+            const noteGeometry = new THREE.PlaneGeometry(0.3, 0.4);
+            const note = new THREE.Mesh(noteGeometry, new THREE.MeshStandardMaterial({ map: noteTexture }));
+            note.position.set(5.2, 2.6, -4.94);
+            note.rotation.z = Math.PI / 12;
+            classroom.add(note);
+
+            const windowTexture = textureLoader.load('./textures/window-outside.jpg');
+            const windowGeometry = new THREE.PlaneGeometry(2, 1.5);
+            const window = new THREE.Mesh(windowGeometry, new THREE.MeshStandardMaterial({ map: windowTexture }));
+            window.position.set(-7.45, 2.5, -2);
+            window.rotation.y = Math.PI / 2;
+            classroom.add(window);
+
+            const doorGeometry = new THREE.PlaneGeometry(2, 3);
+            const doorMaterial = new THREE.MeshStandardMaterial({
+                color: 0x8B4513,
+                roughness: 0.7,
+                metalness: 0.2
+            });
+            const door = new THREE.Mesh(doorGeometry, doorMaterial);
+            door.position.set(3.5, 1.5, 5);
+            door.rotation.y = Math.PI;
+            classroom.add(door);
+
+            const chalkboardTexture = textureLoader.load('./textures/periodic-table.jpg');
+            const chalkboardGeometry = new THREE.BoxGeometry(8, 2, 0.1);
+            const chalkboardMaterial = new THREE.MeshStandardMaterial({
+                map: chalkboardTexture,
+                roughness: 0.9,
+                metalness: 0.1
+            });
+            const chalkboard = new THREE.Mesh(chalkboardGeometry, chalkboardMaterial);
+            chalkboard.position.set(0, 2, -4.9);
+            classroom.add(chalkboard);
+
+            fontLoader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', (font) => {
+                const textGeometry = new THREE.TextGeometry('E=mc²', {
+                    font: font,
+                    size: 0.2,
+                    height: 0.01,
+                    curveSegments: 12,
+                });
+                const textMaterial = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.9 }); // Black text for white background
+                const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+                textMesh.position.set(-1, 2.2, -4.85);
+                classroom.add(textMesh);
+            });
+
+            const chalkGeometry = new THREE.BoxGeometry(0.2, 0.02, 0.02);
+            const chalkMaterial = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.9 }); // Black chalk for visibility
+            const chalk = new THREE.Mesh(chalkGeometry, chalkMaterial);
+            chalk.position.set(0.8, 0.45, -3);
+            chalk.rotation.z = Math.PI / 6;
+            classroom.add(chalk);
+
+            const teacherDeskGeometry = new THREE.BoxGeometry(2, 0.8, 1);
+            const deskMaterial = new THREE.MeshStandardMaterial({
+                color: 0x8B4513,
+                roughness: 0.7,
+                metalness: 0.2
+            });
+            const teacherDesk = new THREE.Mesh(teacherDeskGeometry, deskMaterial);
+            teacherDesk.position.set(0, 0.4, -3);
+            teacherDesk.castShadow = true;
+            teacherDesk.receiveShadow = true;
+            classroom.add(teacherDesk);
+
+            const microscopeBaseGeometry = new THREE.BoxGeometry(0.3, 0.2, 0.3);
+            const microscopeMaterial = new THREE.MeshStandardMaterial({ color: 0x333333 });
+            const microscopeBase = new THREE.Mesh(microscopeBaseGeometry, microscopeMaterial);
+            microscopeBase.position.set(-0.5, 0.5, -3);
+            microscopeBase.castShadow = true;
+            classroom.add(microscopeBase);
+
+            const microscopeTubeGeometry = new THREE.CylinderGeometry(0.05, 0.05, 0.4, 16);
+            const microscopeTube = new THREE.Mesh(microscopeTubeGeometry, microscopeMaterial);
+            microscopeTube.position.set(-0.5, 0.7, -3);
+            microscopeTube.castShadow = true;
+            classroom.add(microscopeTube);
+
+            return classroom;
+        }
+
+        const classroom = createClassroom();
+        scene.add(classroom);
+
+        function createDesk(posX, posZ, rotation = 0) {
+            const deskGroup = new THREE.Group();
+            
+            const deskTexture = textureLoader.load('./textures/desk-texture.jpg');
+            const deskGeometry = new THREE.BoxGeometry(1.2, 0.05, 0.8);
+            const deskMaterial = new THREE.MeshStandardMaterial({
+                map: deskTexture,
+                roughness: 0.7,
+                metalness: 0.2
+            });
+            const deskTop = new THREE.Mesh(deskGeometry, deskMaterial);
+            deskTop.position.y = 0.7;
+            deskTop.castShadow = true;
+            deskTop.receiveShadow = true;
+            deskGroup.add(deskTop);
+
+            const legGeometry = new THREE.BoxGeometry(0.05, 0.7, 0.05);
+            const legMaterial = new THREE.MeshStandardMaterial({ color: 0xCD853F });
+            const legs = [
+                [-0.55, 0.35, 0.35], [0.55, 0.35, 0.35],
+                [-0.55, 0.35, -0.35], [0.55, 0.35, -0.35]
+            ];
+            legs.forEach(pos => {
+                const leg = new THREE.Mesh(legGeometry, legMaterial);
+                leg.position.set(...pos);
+                leg.castShadow = true;
+                deskGroup.add(leg);
+            });
+
+            const chairMaterial = new THREE.MeshStandardMaterial({ color: 0x8B4513 });
+            const chairSeatGeometry = new THREE.BoxGeometry(0.5, 0.05, 0.5);
+            const chairSeat = new THREE.Mesh(chairSeatGeometry, chairMaterial);
+            chairSeat.position.set(0, 0.45, -0.5);
+            chairSeat.castShadow = true;
+            deskGroup.add(chairSeat);
+
+            const chairBackGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.05);
+            const chairBack = new THREE.Mesh(chairBackGeometry, chairMaterial);
+            chairBack.position.set(0, 0.7, -0.75);
+            chairBack.castShadow = true;
+            deskGroup.add(chairBack);
+
+            const chairLegGeometry = new THREE.BoxGeometry(0.05, 0.45, 0.05);
+            const chairLegs = [
+                [-0.22, 0.225, -0.3], [0.22, 0.225, -0.3],
+                [-0.22, 0.225, -0.7], [0.22, 0.225, -0.7]
+            ];
+            chairLegs.forEach(pos => {
+                const leg = new THREE.Mesh(chairLegGeometry, chairMaterial);
+                leg.position.set(...pos);
+                leg.castShadow = true;
+                deskGroup.add(leg);
+            });
+
+            if (posX === -3 && posZ === 0) {
+                const notebookGeometry = new THREE.BoxGeometry(0.4, 0.05, 0.3);
+                const notebookTexture = textureLoader.load('./textures/notebook-cover.jpg');
+                const notebook = new THREE.Mesh(notebookGeometry, new THREE.MeshStandardMaterial({ map: notebookTexture }));
+                notebook.position.set(0, 0.75, 0.2);
+                notebook.rotation.y = Math.PI / 12;
+                deskGroup.add(notebook);
+            }
+
+            deskGroup.position.set(posX, 0, posZ);
+            deskGroup.rotation.y = rotation;
+            return deskGroup;
+        }
+
+        function createStudent(skinTone) {
+            const student = new THREE.Group();
+            student.name = 'student';
+
+            const headGeometry = new THREE.SphereGeometry(0.15, 32, 32);
+            const head = new THREE.Mesh(headGeometry, new THREE.MeshStandardMaterial({ color: skinTone }));
+            head.position.y = 1.25;
+            head.castShadow = true;
+            student.add(head);
+
+            const shirtTexture = textureLoader.load('./textures/shirt-red.jpg');
+            const torsoGeometry = new THREE.CylinderGeometry(0.15, 0.15, 0.4, 16);
+            const torso = new THREE.Mesh(torsoGeometry, new THREE.MeshStandardMaterial({ map: shirtTexture }));
+            torso.position.y = 1.0;
+            torso.castShadow = true;
+            student.add(torso);
+
+            const pantsMaterial = new THREE.MeshStandardMaterial({ color: 0x000080 });
+            const legGeometry = new THREE.CylinderGeometry(0.08, 0.08, 0.5, 12);
+            const leftLeg = new THREE.Mesh(legGeometry, pantsMaterial);
+            leftLeg.position.set(-0.1, 0.6, 0);
+            leftLeg.castShadow = true;
+            student.add(leftLeg);
+            const rightLeg = leftLeg.clone();
+            rightLeg.position.x = 0.1;
+            student.add(rightLeg);
+
+            return student;
+        }
+
+        function createClassDesks() {
+            const desksGroup = new THREE.Group();
+            const skinTones = [0xffe0bd, 0xf1c27d, 0xe0ac69, 0xc68642, 0x8d5524];
+            const rows = 4, columns = 5;
+            const deskSpacingX = 1.5, deskSpacingZ = 1.8;
+            const startX = -3, startZ = 0;
+
+            for (let row = 0; row < rows; row++) {
+                for (let col = 0; col < columns; col++) {
+                    const x = startX + col * deskSpacingX + (Math.random() - 0.5) * 0.2;
+                    const z = startZ + row * deskSpacingZ + (Math.random() - 0.5) * 0.2;
+                    if (Math.random() > 0.9) continue;
+
+                    const desk = createDesk(x, z, (Math.random() - 0.5) * 0.1);
+                    desksGroup.add(desk);
+
+                    const skinTone = skinTones[Math.floor(Math.random() * skinTones.length)];
+                    const student = createStudent(skinTone);
+                    student.position.set(x, 0, z - 0.5);
+                    desksGroup.add(student);
+                }
+            }
+            return desksGroup;
+        }
+
+        const classDesks = createClassDesks();
+        scene.add(classDesks);
+
+        function createSecurityCamera() {
+            const cameraGroup = new THREE.Group();
+
+            const mountGeometry = new THREE.BoxGeometry(0.3, 0.3, 0.3);
+            const mountMaterial = new THREE.MeshStandardMaterial({
+                color: 0xFFFFFF, // Blue mount
+                roughness: 0.7,
+                metalness: 0.7
+            });
+            const mount = new THREE.Mesh(mountGeometry, mountMaterial);
+            cameraGroup.add(mount);
+
+            const cameraBodyGeometry = new THREE.BoxGeometry(0.4, 0.25, 0.5);
+            const cameraBodyMaterial = new THREE.MeshStandardMaterial({
+                color: 0xFFFFFF, // Blue body
+                roughness: 0.5,
+                metalness: 0.8
+            });
+            const cameraBody = new THREE.Mesh(cameraBodyGeometry, cameraBodyMaterial);
+            cameraBody.position.set(0, 0, 0.25);
+            cameraGroup.add(cameraBody);
+
+            const lensGeometry = new THREE.CylinderGeometry(0.1, 0.12, 0.15, 32);
+            const lensMaterial = new THREE.MeshPhysicalMaterial({
+                color: 0xFB9092, // Red lens
+                roughness: 0.1,
+                metalness: 0.9,
+                transmission: 0.8,
+                thickness: 0.1,
+                clearcoat: 1.0
+            });
+            const lens = new THREE.Mesh(lensGeometry, lensMaterial);
+            lens.position.set(0, 0, 0.5);
+            lens.rotation.x = Math.PI / 2;
+            cameraGroup.add(lens);
+
+            const domeGeometry = new THREE.SphereGeometry(0.35, 32, 32);
+            const domeMaterial = new THREE.MeshPhysicalMaterial({
+                color: 0xaaaaaa,
+                transparent: true,
+                opacity: 0.3,
+                roughness: 0.1,
+                metalness: 0.8,
+                transmission: 0.9
+            });
+            const dome = new THREE.Mesh(domeGeometry, domeMaterial);
+            dome.position.set(0, 0, 0.25);
+            cameraGroup.add(dome);
+
+            const ledRingGeometry = new THREE.TorusGeometry(0.13, 0.02, 16, 32);
+            const ledRingMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00, emissive: 0x00ff00 });
+            const ledRing = new THREE.Mesh(ledRingGeometry, ledRingMaterial);
+            ledRing.position.set(0, 0, 0.51);
+            ledRing.rotation.x = Math.PI / 2;
+            cameraGroup.add(ledRing);
+
+            const redLightGeometry = new THREE.SphereGeometry(0.03, 8, 8);
+            const redLightMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+            const redLight = new THREE.Mesh(redLightGeometry, redLightMaterial);
+            redLight.position.set(0.15, 0.05, 0.4);
+            cameraGroup.add(redLight);
+            setInterval(() => redLight.visible = !redLight.visible, 1000);
+
+            const laserGeometry = new THREE.CylinderGeometry(0.01, 0.01, 0.5, 8);
+            const laserMaterial = new THREE.MeshBasicMaterial({ color: 0xff3333, transparent: true, opacity: 0.3 });
+            const laser = new THREE.Mesh(laserGeometry, laserMaterial);
+            laser.position.set(0, 0, 0.6);
+            laser.rotation.x = Math.PI / 2;
+            laser.visible = false;
+            cameraGroup.add(laser);
+
+            const laserLight = new THREE.PointLight(0xff3333, 0.8, 10);
+            laserLight.position.set(0, 0, 0.6);
+            laserLight.visible = false;
+            cameraGroup.add(laserLight);
+
+            cameraGroup.position.set(7, 3.5, 4.5);
+            cameraGroup.rotation.y = -Math.PI / 4 - Math.PI / 2;
+            cameraGroup.rotation.x = -Math.PI / 6;
+            return { group: cameraGroup, laser, light: laserLight };
+        }
+
+        const securityCamera = createSecurityCamera();
+        scene.add(securityCamera.group);
+
+        const securityCameraView = new THREE.PerspectiveCamera(70, canvasContainer.clientWidth / canvasContainer.clientHeight, 0.1, 1000);
+        securityCameraView.position.copy(securityCamera.group.position);
+        const lookDirection = new THREE.Vector3(0, 0, -1).applyQuaternion(securityCamera.group.quaternion);
+        const targetPoint = securityCamera.group.position.clone().add(lookDirection.multiplyScalar(10));
+        securityCameraView.lookAt(targetPoint);
+
+        let activeCamera = camera;
+        let captureCount = 0;
+        let autoCapturing = false;
+        let captureTimer = null;
+
+        function captureImage() {
+            securityCamera.laser.visible = true;
+            securityCamera.light.visible = true;
+            const flash = document.getElementById('flash');
+            flash.classList.add('flash-active');
+            captureCount++;
+            document.getElementById('capture-count').textContent = captureCount;
+            setTimeout(() => {
+                flash.classList.remove('flash-active');
+                securityCamera.laser.visible = false;
+                securityCamera.light.visible = false;
+            }, 150);
+        }
+
+        function toggleAutoCapture() {
+            autoCapturing = !autoCapturing;
+            if (autoCapturing) {
+                document.getElementById('auto-btn').textContent = 'Stop Auto Capture';
+                document.getElementById('camera-mode').textContent = 'Automatic';
+                captureTimer = setInterval(captureImage, 3000);
+            } else {
+                document.getElementById('auto-btn').textContent = 'Auto Capture';
+                document.getElementById('camera-mode').textContent = 'Manual';
+                clearInterval(captureTimer);
+                captureTimer = null;
+            }
+        }
+
+        function toggleCameraView() {
+            activeCamera = activeCamera === camera ? securityCameraView : camera;
+            overlayDiv.style.display = activeCamera === securityCameraView ? 'block' : 'none';
+            updateTimestamp();
+        }
+
+        function updateTimestamp() {
+            if (activeCamera === securityCameraView) {
+                overlayDiv.textContent = new Date().toLocaleString();
+            }
+        }
+
+        function resizeRenderer() {
+            const width = canvasContainer.clientWidth;
+            const height = canvasContainer.clientHeight;
+            renderer.setSize(width, height);
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+            securityCameraView.aspect = width / height;
+            securityCameraView.updateProjectionMatrix();
+        }
+
+        window.addEventListener('resize', resizeRenderer);
+        resizeRenderer();
+
+        document.getElementById('auto-btn').addEventListener('click', toggleAutoCapture);
+        document.getElementById('capture-btn').addEventListener('click', captureImage);
+        document.getElementById('reset-btn').addEventListener('click', () => {
+            captureCount = 0;
+            document.getElementById('capture-count').textContent = '0';
+            if (autoCapturing) {
+                clearInterval(captureTimer);
+                captureTimer = setInterval(captureImage, 3000);
+            }
+        });
+
+        window.addEventListener('keydown', (event) => {
+            if (event.key === 'v' || event.key === 'V') toggleCameraView();
+        });
+
+        function animate() {
+            requestAnimationFrame(animate);
+            securityCamera.group.rotation.y += Math.sin(Date.now() * 0.0005) * 0.001;
+            securityCameraView.rotation.y = securityCamera.group.rotation.y;
+            scene.traverse(obj => {
+                if (obj.isMesh && obj.parent.name === 'student') {
+                    obj.position.y += Math.sin(Date.now() * 0.001) * 0.001;
+                }
+            });
+            updateTimestamp();
+            renderer.render(scene, activeCamera);
+        }
+
+        animate();
+
+        setTimeout(() => {
+            const instructionDiv = document.createElement('div');
+            instructionDiv.style.position = 'absolute';
+            instructionDiv.style.bottom = 'clamp(40px, 5vw, 60px)';
+            instructionDiv.style.left = '50%';
+            instructionDiv.style.transform = 'translateX(-50%)';
+            instructionDiv.style.color = 'yellow';
+            instructionDiv.style.backgroundColor = 'rgba(0,0,0,0.7)';
+            instructionDiv.style.padding = 'clamp(5px, 1vw, 10px)';
+            instructionDiv.style.borderRadius = '5px';
+            instructionDiv.style.zIndex = '100';
+            instructionDiv.style.fontSize = 'clamp(10px, 1vw, 14px)';
+            instructionDiv.textContent = 'Press V to toggle between classroom view and camera view';
+            document.getElementById('canvas-container').appendChild(instructionDiv);
+        }, 2000);
+    </script>
+</body>
+</html>

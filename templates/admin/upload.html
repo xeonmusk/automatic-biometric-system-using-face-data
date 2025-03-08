@@ -1,0 +1,177 @@
+<!-- filepath: /c:/Users/geeth/Downloads/final_project-main/final_project-main/templates/admin/upload.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Dataset</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1a1f25 0%, #0d1117 100%);
+            color: #e6edf3;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #161b22;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        header h1 {
+            margin: 0;
+            text-align: center;
+            color: #58a6ff;
+            font-size: 2rem;
+            letter-spacing: 1px;
+        }
+
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 160px);
+            padding: 2rem;
+        }
+
+        .upload-container {
+            background-color: #21262d;
+            border-radius: 12px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .upload-zone {
+            border: 2px dashed #30363d;
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-zone:hover {
+            border-color: #58a6ff;
+            background-color: rgba(88, 166, 255, 0.1);
+        }
+
+        .upload-zone.dragover {
+            border-color: #238636;
+            background-color: rgba(35, 134, 54, 0.1);
+        }
+
+        label {
+            display: block;
+            color: #58a6ff;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .upload-button {
+            background-color: #238636;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .upload-button:hover {
+            background-color: #2ea043;
+            transform: translateY(-2px);
+        }
+
+        .selected-files {
+            margin-top: 1rem;
+            color: #8b949e;
+            font-size: 0.9rem;
+        }
+
+        footer {
+            background-color: #161b22;
+            padding: 1rem;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        footer p {
+            margin: 0;
+            color: #8b949e;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Upload Dataset</h1>
+    </header>
+
+    <main>
+        <div class="upload-container">
+            <form action="/uploadDataset" method="post" enctype="multipart/form-data">
+                <div class="upload-zone" id="dropZone" onclick="document.getElementById('folder').click()">
+                    <label for="folder">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="17 8 12 3 7 8"/>
+                            <line x1="12" y1="3" x2="12" y2="15"/>
+                        </svg>
+                        <p>Drag and drop folder here or click to select</p>
+                    </label>
+                    <input type="file" id="folder" name="folder" webkitdirectory directory multiple>
+                </div>
+                <div class="selected-files" id="fileList"></div>
+                <button type="submit" class="upload-button">Upload Dataset</button>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Attendance System. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('folder');
+        const fileList = document.getElementById('fileList');
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            fileInput.files = e.dataTransfer.files;
+            updateFileList();
+        });
+
+        fileInput.addEventListener('change', updateFileList);
+
+        function updateFileList() {
+            const files = fileInput.files;
+            fileList.textContent = `${files.length} files selected`;
+        }
+    </script>
+</body>
+</html>
