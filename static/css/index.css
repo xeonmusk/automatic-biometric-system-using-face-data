@@ -1,0 +1,125 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+}
+header {
+    background-color: #3f51b5;
+    color: white;
+    text-align: center;
+    padding: 1.5em 0;
+}
+header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+}
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 20px;
+    min-height: 80vh;
+}
+.card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin: 20px;
+    padding: 40px;
+    text-align: center;
+    width: 250px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+.card h2 {
+    color: #333;
+    margin-bottom: 10px;
+}
+.card p {
+    color: #666;
+    font-size: 16px;
+    margin: 15px 0;
+}
+.card a {
+    text-decoration: none;
+    color: white;
+    background-color: #3f51b5;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+.card a:hover {
+    background-color: #303f9f;
+}
+footer {
+    background-color: #3f51b5;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    margin-top: 20px;
+}
+footer p {
+    margin: 0;
+}
+
+h1 {
+    margin: 0;
+    font-size: 2.5em;
+}
+
+section {
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 600px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#register-section {
+    background-color: #ffecb3;
+    border-left: 5px solid #ffc107;
+}
+
+#admin-section {
+    background-color: #e3f2fd;
+    border-left: 5px solid #2196f3;
+}
+
+#attendance-section {
+    background-color: #fce4ec;
+    border-left: 5px solid #e91e63;
+}
+
+h2 {
+    margin-bottom: 15px;
+}
+
+button {
+    background-color: #3f51b5;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+button:hover {
+    background-color: white;
+}
+
+a {
+    text-decoration: none;
+    color: #007BFF;
+    font-size: 1.2em;
+}
+
+a:hover {
+    text-decoration: none;
+}
