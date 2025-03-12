@@ -2,6 +2,7 @@
     "name": "Python 3 Development",
     "image": "mcr.microsoft.com/devcontainers/python:3.11",
     "postCreateCommand": "pip install -r requirements.txt",
+    "postStartCommand": "python app.py",
     "customizations": {
         "vscode": {
             "extensions": [
