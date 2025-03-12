@@ -1,22 +1,22 @@
 # Web Framework
-Flask==2.3.3  # Updated to a recent stable version compatible with Werkzeug
-Werkzeug==3.0.3  # Compatible with Flask 2.3.3
+Flask==2.3.3  # Stable version, compatible with Werkzeug 3.0.3
+Werkzeug==3.0.3  # Matches Flask 2.3.3 requirements
 
 # Data Processing
-numpy==1.26.4  # Downgraded to resolve compatibility with other libraries
+numpy==1.26.4  # Stable and compatible with TensorFlow 2.18.0
 pandas==2.2.2  # Latest stable version as of March 2025
-opencv-python-headless==4.8.0.76  # Headless version as installed in your environment
+opencv-python-headless==4.8.0.76  # Headless version, matches your original setup
 
 # Deep Learning
-tensorflow==2.15.0  # Updated to a version compatible with numpy 1.26.4
-keras==2.15.0  # Matched with TensorFlow version
-scikit-learn==1.5.1  # Latest stable version
+tensorflow==2.18.0  # Compatible with Python 3.12 and numpy 1.26.4
+keras==3.6.0  # Updated to latest stable version compatible with TensorFlow 2.18.0
+scikit-learn==1.5.1  # Latest stable version as of March 2025
 
 # Image Processing
-matplotlib==3.9.2  # Latest stable version
+matplotlib==3.9.2  # Latest stable version as of March 2025
 
 # Excel Handling
-openpyxl==3.1.5  # Latest stable version
+openpyxl==3.1.5  # Latest stable version as of March 2025
 
 # Utils
 python-dotenv==1.0.1  # Latest stable version
