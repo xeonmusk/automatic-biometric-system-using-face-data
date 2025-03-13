@@ -695,11 +695,15 @@ def camera():
 #------------------------------------------------------------------------------------#
 #---------------------------------VIDEO ACCESS--------------------------------------#
 #------------------------------------------------------------------------------------#
-@app.route('/video_record')
+#@app.route('/video_record')
+@app.route('/video_record', methods=['POST'])
 def video_Access():
     import time
-    
-    url = "http://192.168.1.8:4747/video"
+    part1 = request.form['part1']
+    part2 = request.form['part2']
+    url = "http://192.168." + part1 + "." + part2 + ":4747/video"
+    #url = f"http://192.168.{part1}.{part2}:4747/video"
+    #url = "http://192.168.1.8:4747/video"
     cap = cv2.VideoCapture(url)
     
     if not cap.isOpened():
