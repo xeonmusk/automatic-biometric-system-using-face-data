@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ModelMaster Pro - Advanced Selection Platform</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Fira+Code:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a192f;
+            --bg-secondary: #112240;
+            --text-primary: #e6f1ff;
+            --text-secondary: #8892b0;
+            --accent-primary: #64ffda;
+            --accent-secondary: #4ecdc4;
+            --border-color: rgba(100, 255, 218, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, #0d2341 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
+        }
+
+        .container {
+            width: 1100px;
+            background-color: var(--bg-secondary);
+            border-radius: 20px;
+            box-shadow: 
+                0 25px 50px -12px rgba(0, 0, 0, 0.25),
+                0 10px 30px rgba(2, 12, 27, 0.7);
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transform-style: preserve-3d;
+            transform: rotateX(5deg) rotateY(-5deg);
+            transition: all 0.3s ease;
+        }
+
+        .container:hover {
+            transform: rotateX(0) rotateY(0);
+            box-shadow: 
+                0 35px 60px -15px rgba(0, 0, 0, 0.3),
+                0 15px 40px rgba(2, 12, 27, 0.8);
+        }
+
+        .grid-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(0deg, transparent 24%, rgba(17, 34, 64, 0.4) 25%, rgba(17, 34, 64, 0.4) 26%, transparent 27%, transparent 74%, rgba(17, 34, 64, 0.4) 75%, rgba(17, 34, 64, 0.4) 76%, transparent 77%, transparent),
+                linear-gradient(90deg, transparent 24%, rgba(17, 34, 64, 0.4) 25%, rgba(17, 34, 64, 0.4) 26%, transparent 27%, transparent 74%, rgba(17, 34, 64, 0.4) 75%, rgba(17, 34, 64, 0.4) 76%, transparent 77%, transparent);
+            background-size: 50px 50px;
+            opacity: 0.05;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .section {
+            position: relative;
+            background-color: black;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: transparent;
+            color: var(--accent-primary);
+            border: 2px solid var(--accent-primary);
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                120deg, 
+                transparent, 
+                rgba(43, 183, 150, 0.2), 
+                transparent
+            );
+            transition: all 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            background-color: rgba(100, 255, 218, 0.1);
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(100, 255, 218, 0.2);
+        }
+
+        .video-upload-zone {
+            border: 2px dashed var(--border-color);
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .video-upload-zone:hover {
+            border-color: var(--accent-primary);
+            background-color: rgba(100, 255, 218, 0.05);
+        }
+
+        .model-select {
+            width: 100%;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+            padding: 12px;
+            border-radius: 10px;
+            appearance: none;
+            background-image: linear-gradient(45deg, transparent 50%, var(--accent-primary) 50%),
+                              linear-gradient(135deg, var(--accent-primary) 50%, transparent 50%);
+            background-position: calc(100% - 20px) calc(1em + 2px),
+                                 calc(100% - 15px) calc(1em + 2px);
+            background-size: 5px 5px,
+                             5px 5px;
+            background-repeat: no-repeat;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 10px;
+            background-color: #ff4757;
+        }
+
+        .status-indicator.active {
+            background-color: #2ed573;
+        }
+
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+
+        .social-links a {
+            color: var(--text-secondary);
+            margin: 0 15px;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--accent-primary);
+        }
+
+        .form-label {
+            color: var(--text-primary);
+            font-size: 14px;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .form-input {
+            width: 100%;
+            max-width: 300px;
+            padding: 10px;
+            margin-bottom: 15px;
+            background-color: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            border-color: var(--accent-primary);
+            outline: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 20px;
+                transform: none;
+            }
+        }
+
+        /* Custom Loading Animation */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .loading-pulse {
+            animation: pulse 1.5s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="grid-overlay"></div>
+
+        <!-- Video Capture Section -->
+        <div class="section video-capture-section">
+            <h2>
+                <span class="status-indicator"></span>
+                Video Capture
+            </h2>
+            <div class="video-upload-zone">
+                <form action="/video_record" method="post" id="videoForm">
+                    <label for="part1" class="form-label">Part 1:</label>
+                    <input type="text" id="part1" name="part1" class="form-input" required>
+
+                    <label for="part2" class="form-label">Part 2:</label>
+                    <input type="text" id="part2" name="part2" class="form-input" required>
+
+                    <button type="button" class="btn" id="cameraButton">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-camera" style="margin-right: 10px;">
+                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                            <circle cx="12" cy="13" r="4"></circle>
+                        </svg>
+                        Video Camera Access
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Video Upload Section -->
+        <div class="section video-upload-section">
+            <h2>
+                <span class="status-indicator"></span>
+                Upload Your Video
+            </h2>
+            <div class="video-upload-zone">
+                <form action="/upload" method="post" enctype="multipart/form-data">
+                    <label for="videoUpload" class="btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-upload" style="margin-right: 10px;">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        Choose a Video File
+                    </label>
+                    <input type="file" id="videoUpload" name="video" accept="video/*" required style="display: none;">
+                    <button type="submit" class="btn" style="margin-top: 15px;">
+                        Upload Video
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Model Selection Section -->
+        <div class="section model-selection-section">
+            <h2>
+                <span class="status-indicator"></span>
+                Model Selection
+            </h2>
+            <form action="/get_attendance_video" method="get" onsubmit="document.querySelector('button[type=submit]').classList.add('loading-pulse')">
+                <select name="class_name" id="class_name" class="model-select">
+                    {% for model in model_files %}
+                        <option value="{{ model }}">{{ model }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn" style="margin-top: 15px;">
+                    Get Attendance via Video
+                </button>
+            </form>
+        </div>
+
+        <!-- Output & Reporting Section -->
+        <div class="section output-section">
+            <h2>
+                <span class="status-indicator active"></span>
+                Output & Reporting
+            </h2>
+            <div style="display: flex; justify-content: space-between;">
+                <button class="btn" onclick="this.classList.add('loading-pulse'); location.href='/download_excel'">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-download" style="margin-right: 10px;">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    Download Attendance
+                </button>
+                <button class="btn" onclick="this.classList.add('loading-pulse'); location.href='available_models'">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list" style="margin-right: 10px;">
+                        <line x1="8" y1="6" x2="21" y2="6"></line>
+                        <line x1="8" y1="12" x2="21" y2="12"></line>
+                        <line x1="8" y1="18" x2="21" y2="18"></line>
+                        <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                        <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                        <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                    </svg>
+                    Available Models
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="social-links">
+                <a href="#" target="_blank">Twitter</a>
+                <a href="#" target="_blank">GitHub</a>
+                <a href="#" target="_blank">LinkedIn</a>
+            </div>
+            <p style="color: var(--text-secondary); margin-top: 15px;">
+                © 2025 ModelMaster Pro | Intelligent Attendance Solution
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Interactive elements
+        document.querySelectorAll('.section').forEach(section => {
+            const statusIndicator = section.querySelector('.status-indicator');
+            section.addEventListener('mouseenter', () => {
+                if (statusIndicator) statusIndicator.classList.add('active');
+            });
+            section.addEventListener('mouseleave', () => {
+                if (statusIndicator) statusIndicator.classList.remove('active');
+            });
+        });
+
+        // File upload interaction
+        const videoUploadInput = document.getElementById('videoUpload');
+        videoUploadInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                alert(`File selected: ${file.name}`);
+                // Implement actual file upload logic
+            }
+        });
+
+        // Video Camera Access button interaction
+        document.getElementById('cameraButton').addEventListener('click', function() {
+            const form = document.getElementById('videoForm');
+            const part1 = document.getElementById('part1').value;
+            const part2 = document.getElementById('part2').value;
+
+            // Check if both fields are filled
+            if (part1.trim() === '' || part2.trim() === '') {
+                alert('Please fill in both Part 1 and Part 2 fields.');
+                return;
+            }
+
+            // Add loading animation
+            this.classList.add('loading-pulse');
+
+            // Submit the form
+            form.submit();
+        });
+    </script>
+</body>
+</html>
