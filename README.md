@@ -113,22 +113,6 @@ Email Notification	smtplib, email.message
 UI	HTML, Jinja2 (Flask templates)
 
 
-
----
-
-📁 Project Folder Structure
-
-├── dataset/              # Original labeled images
-├── processed_images/     # Grayscale, resized images
-├── encodings/            # .pkl facial embeddings
-├── models/               # Trained .h5 models per person
-├── static/               # Uploaded prediction images
-├── templates/            # HTML frontend
-├── app.py                # Main Flask application
-
-
----
-
 ✅ Key Highlights
 
 🔍 Uses YOLO for real-time face detection from live webcam feed.
